@@ -12,7 +12,7 @@ public class SineWave implements ISignal {
 
     Thread signalThread;
 
-    public SineWave(double amplitude, double frequency, double updates) {
+    public SineWave(double amplitude, double frequency, double updates, double phase) {
 
         this.angularFrequency = 2 * (Math.PI * frequency);
         long wait = (long) (1000 / updates);
@@ -21,7 +21,7 @@ public class SineWave implements ISignal {
             signalValue.set(0.0);
             while (true) {
 
-                signalValue.set( Math.sin(angularFrequency * ( (double) (System.currentTimeMillis() - startTime) / 1000)) * amplitude );
+                signalValue.set( Math.sin((angularFrequency * ( (double) (System.currentTimeMillis() - startTime) / 1000)  + phase)) * amplitude );
 
                 try {
                     Thread.sleep(wait);

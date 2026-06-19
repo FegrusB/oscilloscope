@@ -26,7 +26,8 @@ public class HelloController {
     @FXML
     private void initialize() {
         signalService = new SignalService();
-        signalService.startSignal(1,0.5,1000.0);
+        //signalService.startSignal(1,0.5,1000.0);
+        signalService.startTest();
 
         xAxis.setAutoRanging(true);
         yAxis.setAutoRanging(true);
