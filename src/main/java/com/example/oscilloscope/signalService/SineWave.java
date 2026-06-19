@@ -21,7 +21,7 @@ public class SineWave implements ISignal {
             signalValue.set(0.0);
             while (true) {
 
-                signalValue.set( Math.sin(angularFrequency * (System.currentTimeMillis() - startTime)) * amplitude );
+                signalValue.set( Math.sin(angularFrequency * ( (double) (System.currentTimeMillis() - startTime) / 1000)) * amplitude );
 
                 try {
                     Thread.sleep(wait);
