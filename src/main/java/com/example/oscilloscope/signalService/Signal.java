@@ -21,6 +21,7 @@ public class Signal {
                 }
             }
         });
+        signalThread.setDaemon(true);
         signalThread.start();
     }
 
