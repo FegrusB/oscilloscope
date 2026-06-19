@@ -8,6 +8,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class HelloController {
 
@@ -20,6 +21,7 @@ public class HelloController {
     @FXML private final XYChart.Series<Number,Number> signalSeries = new XYChart.Series<>();
     @FXML private NumberAxis xAxis;
     @FXML private NumberAxis yAxis;
+    @FXML private TextField frequency;
 
     @FXML
     private void initialize() {
@@ -44,15 +46,25 @@ public class HelloController {
     }
 
     private void startScope(){
-        new AnimationTimer(){
-            @Override
-            public void handle(long now) {
-                double x = (double) (System.currentTimeMillis() - startTime) /1000;
-                double y = signalService.getSignal(0).signalValue.get();
 
-                signalSeries.getData().add(new XYChart.Data<>(x,y));
+        long wait = (long) (1000 / Double.parseDouble(frequency.getText()));
+
+        Thread thread = new Thread(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+
+            double x = (double) (System.currentTimeMillis() - startTime) / 1000;
+            double y = signalService.getSignal(0).signalValue.get();
+
+            signalSeries.getData().add(new XYChart.Data<>(x, y));
+            try {
+                Thread.sleep(wait);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-        }.start();
+        }
+        });
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @FXML
