@@ -10,6 +10,10 @@ public class SignalService {
         signals.add(new SquareWave(amplitude, frequency));
     }
 
+    public void startSignal(double amplitude, double frequency, double updates) {
+        signals.add(new SineWave(amplitude, frequency, updates));
+    }
+
     public ISignal getSignal(int index) {
         return signals.get(index);
     }
