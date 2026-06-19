@@ -20,7 +20,7 @@
    <ToolBar prefHeight="40.0" prefWidth="200.0">
      <items>
           <Button onAction="#onHelloButtonClick" text="Hello!" />
-         <TextField fx:id="frequency" prefHeight="25.0" prefWidth="59.0" />
+         <TextField fx:id="frequency" prefHeight="25.0" prefWidth="59.0" text="60" />
      </items>
    </ToolBar>
 </VBox>

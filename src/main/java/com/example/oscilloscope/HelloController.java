@@ -10,12 +10,16 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class HelloController {
 
     private SignalService signalService;
     private double signalValue;
     private static final int MAX_POINTS = 200;
     private long startTime = 0;
+
+    private final AtomicReference<XYChart.Data<Number,Number> > latestValue = new AtomicReference<>();
 
     @FXML private LineChart<Number,Number> scopeView;
     @FXML private final XYChart.Series<Number,Number> signalSeries = new XYChart.Series<>();
@@ -28,6 +32,7 @@ public class HelloController {
         signalService = new SignalService();
         //signalService.startSignal(1,0.5,1000.0);
         signalService.startTest();
+        startProbe();
 
         xAxis.setAutoRanging(true);
         yAxis.setAutoRanging(true);
@@ -46,7 +51,7 @@ public class HelloController {
 
     }
 
-    private void startScope(){
+    private void startProbe(){
 
         long wait = (long) (1000 / Double.parseDouble(frequency.getText()));
 
@@ -56,7 +61,7 @@ public class HelloController {
             double x = (double) (System.currentTimeMillis() - startTime) / 1000;
             double y = signalService.getSignal(0).getSignal();
 
-            signalSeries.getData().add(new XYChart.Data<>(x, y));
+            latestValue.set( new XYChart.Data<>(x, y));
             try {
                 Thread.sleep(wait);
             } catch (InterruptedException e) {
@@ -70,6 +75,11 @@ public class HelloController {
 
     @FXML
     protected void onHelloButtonClick() {
-        startScope();
+       new AnimationTimer() {
+           @Override
+           public void handle(long now) {
+               signalSeries.getData().add(latestValue.get());
+           }
+       }.start();
     }
 }
