@@ -2,13 +2,13 @@ package com.example.oscilloscope.signalService;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-public class Signal {
+public class SquareWave implements ISignal {
 
-    public AtomicReference<Double> signalValue = new AtomicReference<>(0.0);
+    private final AtomicReference<Double> signalValue = new AtomicReference<>(0.0);
 
     Thread signalThread;
 
-    public Signal(double amplitude, double frequency) {
+    public SquareWave(double amplitude, double frequency) {
         long wait = (long) (1000 / frequency);
         signalThread = new Thread(() -> {
             signalValue.set(amplitude);
@@ -23,6 +23,10 @@ public class Signal {
         });
         signalThread.setDaemon(true);
         signalThread.start();
+    }
+
+    public Double getSignal() {
+        return signalValue.get();
     }
 
 }

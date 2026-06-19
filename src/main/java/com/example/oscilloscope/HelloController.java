@@ -53,7 +53,7 @@ public class HelloController {
             while (!Thread.currentThread().isInterrupted()) {
 
             double x = (double) (System.currentTimeMillis() - startTime) / 1000;
-            double y = signalService.getSignal(0).signalValue.get();
+            double y = signalService.getSignal(0).getSignal();
 
             signalSeries.getData().add(new XYChart.Data<>(x, y));
             try {
